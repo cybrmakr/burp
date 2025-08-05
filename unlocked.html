@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Burp Suite Pro Course</title>
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: row;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    sidebar {
+      width: 220px;
+      background-color: #f4f4f4;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .chapter {
+      margin: 10px 0;
+      padding: 10px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .chapter:hover {
+      background: #e6f0ff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .chapter.current {
+      font-weight: bold;
+      color: blue;
+      border-color: blue;
+      background: #f0f8ff;
+    }
+    h1, h2 {
+      margin: 5px 0;
+    }
+    iframe {
+      width: 100%;
+      height: 540px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      background: black;
+      border: none;
+      display: block;
+      margin: 0 auto;
+    }
+    footer {
+      width: 100%;
+      background-color: #f4f4f4;
+      padding: 10px;
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      border-top: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <sidebar>
+    <h2>Chapters</h2>
+    <div class="chapter current" onclick="changeVideo('https://1drv.ms/v/c/7dfb361a16d62b37/IQThYfNsJMUnQbD6Ytm38GvWAR95VQxbL9zGJouUpLGsjn0?width=1920&height=1080', this)">
+      Chapter 1: Proxy History 1/2
+    </div>
+    <div class="chapter" onclick="changeVideo('https://1drv.ms/v/c/7dfb361a16d62b37/IQRLUjt5fev6S56qzZqGdCNYAdSnFBKs3Him9Jc8_a6O8ZI?width=1920&height=1080', this)">Chapter 2: Proxy History 2/2</div>
+    <div class="chapter" onclick="changeVideo('https://1drv.ms/v/c/7dfb361a16d62b37/IQSzn4LZfcxqSb8GZMTWDcD1AUCQB_dTghHzWOcu2Ll4DHI?width=1920&height=1080', this)">Chapter 3: Burp Repeater</div>
+    <div class="chapter" onclick="changeVideo('https://1drv.ms/v/c/7dfb361a16d62b37/IQTuBnLphKBRTKEBN5WzlJ4FAfphaHswDQTo9ai446k6jEI?width=1920&height=1080', this)">
+      Chapter 4: Wordlists and Hackvertor <span style="color: red;">🔓</span>
+    </div>
+    <div class="chapter" onclick="changeVideo('https://1drv.ms/v/c/7dfb361a16d62b37/IQTt_eErZeqBRYzccHjHOElYAW5DKunWBnn0Xwd0V-Bb6oo?width=1920&height=1080', this)">
+      Chapter 5: Piper <span style="color: red;">🔓</span>
+    </div>
+    <div class="chapter" onclick="changeVideo('https://1drv.ms/v/c/7dfb361a16d62b37/IQQr0z32dkomS5KiUOd64_8LAT25sgrBLrtGahCsxjgJEkg?width=1920&height=1080', this)">
+      Chapter 6: Burp Bounty <span style="color: red;">🔓</span>
+    </div>
+    <div class="chapter" onclick="changeVideo('https://1drv.ms/v/c/7dfb361a16d62b37/IQQonZk7vZ_lR7p22-Uzl5ynAQkFEZrVgPLbUt5uWp05osQ?width=1920&height=1080', this)">
+      Chapter 7: Poor-man Automation <span style="color: red;">🔓</span>
+    </div>    
+  </sidebar>
+
+  <main>
+    <h1>✴️ Burp Suite Pro Course</h1>
+    <p style="font-size: 14px; color: #555; margin-bottom: 10px;">
+      Please be patient as the videos may take a moment to load.
+    </p>
+    <h2>Chapter 1: Introduction to Burp Suite</h2>
+    <div id="video-container" style="position: relative; width: 100%; height: 480px;">
+      <iframe
+        id="course-iframe"
+        src="https://1drv.ms/v/c/7dfb361a16d62b37/IQThYfNsJMUnQbD6Ytm38GvWAR95VQxbL9zGJouUpLGsjn0?width=1920&height=1080"
+        allowfullscreen
+        scrolling="no"
+        frameborder="0"
+        style="width: 100%; height: 100%;"
+      ></iframe>
+      <div id="locked-message" 
+        style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;
+               display:flex; flex-direction:column; justify-content:center; align-items:center;
+               background:rgba(255,255,255,0.95);">
+        <p style="font-size: 18px; color: #333; margin-bottom: 15px;">
+           This chapter is locked.
+        </p>
+        <p style="font-size: 20px; color: #333; margin-bottom: 15px;">
+          🔓 Unlock all chapters? Just send an email.
+        </p>
+        <button onclick="window.open('mailto:hi@olivermaicher.eu', '_blank')" 
+          style="background-color: #ff813f; color: white; padding: 10px 20px; border: none; 
+                 border-radius: 8px; cursor: pointer; font-size: 16px;">
+          ☕ Unlock with Coffee
+        </button>
+      </div>
+    </div>
+  </main>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    // Ensure first chapter is active
+    document.querySelectorAll('.chapter').forEach(ch => ch.classList.remove('current'));
+    const firstChapter = document.querySelector('.chapter');
+    firstChapter.classList.add('current');
+
+    // Ensure iframe is visible and locked message is hidden
+    const iframe = document.getElementById('course-iframe');
+    const lockedMsg = document.getElementById('locked-message');
+    iframe.style.display = 'block';
+    lockedMsg.style.display = 'none';
+  });
+
+  function changeVideo(videoSrc, clickedElement) {
+    const iframe = document.getElementById('course-iframe');
+    const lockedMsg = document.getElementById('locked-message');
+    const mainTitle = document.querySelector('main h2');
+
+    // Remove 'current' class from all chapters
+    document.querySelectorAll('.chapter').forEach(chapter => {
+      chapter.classList.remove('current');
+    });
+    clickedElement.classList.add('current');
+
+    if (videoSrc === 'locked') {
+      iframe.style.display = 'none';
+      lockedMsg.style.display = 'flex';
+      mainTitle.textContent = clickedElement.textContent;
+    } else {
+      iframe.src = videoSrc;
+      iframe.style.display = 'block';
+      lockedMsg.style.display = 'none';
+      mainTitle.textContent = clickedElement.textContent;
+    }
+  }
+</script>
+
+
+  <footer>
+    © 2025 Burp Suite Pro Course. All rights reserved.
+  </footer>
+</body>
