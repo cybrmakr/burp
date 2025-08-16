@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Bug Bounty Program • Oliver Maicher</title>
+  <meta name="description"
+    content="Simple, trustworthy bug bounty program by Oliver Maicher. Submit vulnerabilities, track current and past programs, and get rewarded." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Bug Bounty Program • Oliver Maicher" />
+  <meta property="og:description" content="Submit vulnerabilities, track programs, and get rewarded." />
+  <meta property="og:type" content="website" />
+
+  <!-- JSON-LD for trust & transparency -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Bug Bounty Program",
+    "url": "https://example.com/",
+    "creator": {
+      "@type": "Person",
+      "name": "Oliver Maicher",
+      "jobTitle": "Creator",
+      "sameAs": []
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      /* Vibrant, tech-inspired yet professional palette */
+      --bg: #0b0f14;
+      /* deep blue-black */
+      --panel: #111620;
+      /* card background */
+      --text: #e8eef6;
+      /* primary text */
+      --muted: #b2c2d6;
+      /* secondary text */
+      --brand: #7c5cff;
+      /* electric violet */
+      --brand-2: #00d1b2;
+      /* aqua teal */
+      --accent: #ffb454;
+      /* amber */
+      --danger: #ff5d5d;
+      /* red */
+      --ok: #36d399;
+      /* green */
+      --focus: #5ad1ff;
+      /* focus ring */
+
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+      --shadow-sm: 0 6px 16px rgba(0, 0, 0, .25);
+
+      --maxw: 1100px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f8fb;
+        --panel: #ffffff;
+        --text: #0e1116;
+        --muted: #5b6b7d;
+        --brand: #5b3eff;
+        --brand-2: #04b6a1;
+        --accent: #e88b14;
+        --danger: #e54848;
+        --ok: #17a36c;
+        --focus: #1aa3e8;
+      }
+    }
+
+    /* Base */
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, var(--bg), #0b0f14 60%);
+      color: var(--text);
+    }
+
+    a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    a:focus,
+    button:focus,
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Layout */
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: saturate(140%) blur(12px);
+      background: color-mix(in hsl, var(--bg), transparent 35%);
+      border-bottom: 1px solid color-mix(in hsl, var(--muted), transparent 70%);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      color: var(--text);
+      opacity: .85
+    }
+
+    .nav a:hover {
+      opacity: 1;
+      background: color-mix(in hsl, var(--panel), transparent 60%);
+    }
+
+    .cta {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #fff !important;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cta:hover {
+      filter: brightness(1.05);
+    }
+
+    main {
+      display: grid;
+      gap: 28px;
+    }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      gap: 18px;
+      padding: 36px 0 8px;
+    }
+
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 44px);
+      margin: 0;
+      letter-spacing: .2px;
+    }
+
+    .hero p {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Trust card */
+    .trust {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 14px;
+      align-items: center;
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .trust small {
+      color: var(--muted);
+    }
+
+    /* Grid sections */
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    @media (min-width: 900px) {
+      .grid {
+        grid-template-columns: 1.2fr .8fr;
+        align-items: start;
+      }
+    }
+
+    /* Dashboard */
+    .card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .input,
+    .select {
+      background: color-mix(in hsl, var(--panel), transparent 0%);
+      border: 1px solid color-mix(in hsl, var(--muted), transparent 60%);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text);
+      min-width: 160px;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid color-mix(in hsl, var(--muted), transparent 75%);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .b-open {
+      background: color-mix(in hsl, var(--ok), transparent 75%);
+      color: var(--ok);
+    }
+
+    .b-closed {
+      background: color-mix(in hsl, var(--danger), transparent 80%);
+      color: var(--danger);
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 999px;
+      background: color-mix(in hsl, var(--muted), transparent 80%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress>span {
+      position: absolute;
+      inset: 0;
+      width: var(--pct, 0%);
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    }
+
+    /* Form */
+    form {
+      display: grid;
+      gap: 12px;
+    }
+
+    label {
+      font-weight: 700;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    textarea {
+      min-height: 110px;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 13px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    .success {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    footer {
+      margin: 26px 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .fade-in {
+        animation: fade .6s ease both;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header aria-label="Primary">
+    <div class="container nav" role="navigation">
+      <div class="brand" aria-label="Home">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Hacker League Bug Bounty</span>
+      </div>
+      <nav class="nav" aria-label="Site">
+        <a href="#programs">Programs</a>
+        <!-- HERO <a href="#submit">Submit</a>ERO -->
+        <a href="#about" class="cta">About Creator</a>
+      </nav>
+    </div>
+  </header>
+
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Find bugs. Get rewarded. Help us build safer software.</h1>
+      <p>Flat rewards. Clear scope. Accessible process. Built with trust.</p>
+      <div class="actions">
+        <!-- HERO<a class="btn cta" href="#submit">Submit a vulnerability</a> -->
+        <a class="btn" href="#programs" aria-label="View current and past programs">View programs</a>
+      </div>
+      <div class="trust" role="complementary" aria-labelledby="trust-title">
+        <div class="avatar" aria-hidden="true">
+          <img src="https://cdn.bitrix24.de/b8437043/landing/a4d/a4d1dc21c4ac3efb26c2eaee1b4c233c/transparent_2x.png"
+            alt="About Oliver Maicher" style="width: 72px; height: 72px; border-radius: 50%;" />
+        </div>
+        <div>
+          <h3 id="trust-title" style="margin:0">Created by Oliver Maicher</h3>
+          <small>Transparent process, fast responses, and fair rewards.
+            <span aria-hidden="true"></span> <span class="hint">GDPR-aware.</span>
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+
+      <section class="card fade-in" id="programs" aria-labelledby="pilot-title">
+        <h1 id="pilot-title">Program: BeRoomie.App</h2>
+          <p><strong>Scope:</strong> https://beroomie.app/</p>
+          <ul class="hint">
+            <li><strong>Start Date:</strong> September 15, 2025</li>
+            <li><strong>Total Budget:</strong> $250 USD</li>
+            <li><strong>Reward Per Valid Finding:</strong> $25</li>
+          </ul>
+          <iframe src="https://beroomie.app/" title="BeRoomie App Preview" width="100%" height="200"
+            style="border:none;"></iframe>
+
+          <h3>Scope</h3>
+          <ul class="hint">
+            <li>Included: https://beroomie.app/</li>
+
+            <li>All in-scope publicly accessible assets of the project (web application, APIs, and front-end).</li>
+            <li>Excludes third-party services unless explicitly owned and operated by us.</li>
+          </ul>
+          <h3>Rewards</h3>
+          <ul class="hint">
+
+            <table class="table" aria-label="Reward breakdown">
+              <thead>
+                <tr>
+                  <th scope="col">Severity</th>
+                  <th scope="col">Reward</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Medium to Critical</td>
+                  <td>$25</td>
+                </tr>
+                <tr>
+                  <td>Informational, Low </td>
+                  <td>-</td>
+                </tr>
+
+              </tbody>
+            </table>
+
+
+
+            <br>
+
+            <li><strong>Flat reward:</strong> $25 per valid, in-scope vulnerability.</li>
+            <li>Maximum of 10 findings will be rewarded (budget cap = $250).</li>
+            <li>Only the first valid report of a unique issue is rewarded.</li>
+
+
+            <table class="table" aria-label="Severity Level Examples">
+              <thead>
+                <tr>
+                  <th scope="col">Severity Level</th>
+                  <th scope="col">Example Issues</th>
+                </tr>
+                <br>
+
+              </thead>
+              <tbody>
+                <tr>
+                  <td>High Severity</td>
+                  <td>SQL injection, authentication bypass, major data leaks</td>
+                </tr>
+                <tr>
+                  <td>Medium Severity</td>
+                  <td>Stored XSS, privilege escalation, insecure direct object references</td>
+                </tr>
+                <tr>
+                  <td>Low Severity</td>
+                  <td>Reflected XSS, misconfigurations, info disclosure</td>
+                </tr>
+                <tr>
+                  <td>Informational</td>
+                  <td>Best-practice gaps with some security relevance</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </ul>
+
+
+
+
+          <h3>Rules</h3>
+          <ul class="hint">
+            <li>Do not perform denial of service (DoS) or any tests that disrupt services.</li>
+            <li>No social engineering, phishing, or attacks against staff or users.</li>
+            <li>Do not access, copy, or modify customer/user data.</li>
+            <li>Reports must include clear reproduction steps and evidence of impact.</li>
+
+            <li>Automated scanner results without proof of exploitability will not be rewarded.</li>
+            <li>Reports are triaged in good faith. Payment is subject to our decision.</li>
+          </ul>
+          <h3>Eligibility</h3>
+          <ul class="hint">
+            <li>Open worldwide to individual security researchers.</li>
+            <li>Must comply with local laws.</li>
+            <li>Rewards will be paid via PayPal (or another agreed-upon method).</li>
+          </ul>
+          <h3>Out of Scope</h3>
+          <ul class="hint">
+            <li>DoS attacks.</li>
+            <li>Spam, brute force, or rate-limit testing.</li>
+            <li>Missing security headers or best-practice issues without real security impact.</li>
+            <li>UI/UX issues that don’t affect security.</li>
+          </ul>
+          <h3>Submission Guidelines</h3>
+          <p>When submitting a report, please include:</p>
+          <ol class="hint">
+            <li><strong>Title/Short Description</strong> of the issue.</li>
+            <li><strong>Steps to Reproduce</strong> – clear and repeatable.</li>
+            <li><strong>Impact</strong> – what an attacker could achieve.</li>
+            <li><strong>Suggested Fix (optional)</strong> – if you have one.</li>
+          </ol>
+      </section>
+
+      <!--<section class="card fade-in" id="programs" aria-labelledby="programs-title">
+        <h2 id="programs-title">Interactive Programs Dashboard</h2>
+        <p class="hint">Track status, budget, and key details. Filter or search to find specific programs.</p>
+
+        <div class="toolbar" role="group" aria-label="Dashboard controls">
+          <input id="search" class="input" type="search" placeholder="Search programs…" aria-label="Search programs" />
+          <select id="statusFilter" class="select" aria-label="Filter by status">
+            <option value="all">All statuses</option>
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+          </select>
+          <select id="sortBy" class="select" aria-label="Sort by">
+            <option value="start">Start date</option>
+            <option value="budget">Budget</option>
+            <option value="name">Name</option>
+          </select>
+        </div>
+
+        <div class="table-wrap" role="region" aria-live="polite" aria-busy="false">
+          <table class="table" aria-describedby="programs-title">
+            <thead>
+              <tr>
+                <th scope="col">Program</th>
+                <th scope="col">Status</th>
+                <th scope="col">Reward</th>
+                <th scope="col">Budget</th>
+                <th scope="col">Progress</th>
+                <th scope="col">Start</th>
+              </tr>
+            </thead>
+            <tbody id="programRows"></tbody>
+          </table>
+        </div>
+      </section>-->
+
+      <!-- SUBMIT FORM 
+      <section class="card fade-in" id="submit" aria-labelledby="submit-title">
+        <h2 id="submit-title">Submit a Vulnerability</h2>
+        <p class="hint">Flat reward: <strong>$25</strong> per valid finding. Max 10 findings (budget $250).</p>
+        <form id="reportForm" novalidate>
+          <div>
+            <label for="name">Your name</label>
+            <input class="input" id="name" name="name" required autocomplete="name" />
+            <div class="error" id="err-name" role="alert" aria-live="polite"></div>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" required autocomplete="email" />
+            <div class="error" id="err-email" role="alert" aria-live="polite"></div>
+          </div>
+          <div>
+            <label for="title">Issue title</label>
+            <input class="input" id="title" name="title" required maxlength="120" />
+            <div class="hint" id="title-hint">Keep it concise (max 120 chars).</div>
+            <div class="error" id="err-title" role="alert" aria-live="polite"></div>
+          </div>
+          <div>
+            <label for="severity">Severity (self-assessed)</label>
+            <select class="select" id="severity" name="severity" required>
+              <option value="">Select…</option>
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+              <option>Informational</option>
+            </select>
+            <div class="error" id="err-severity" role="alert" aria-live="polite"></div>
+          </div>
+          <div>
+            <label for="url">Affected URL/Endpoint</label>
+            <input class="input" id="url" name="url" type="url" placeholder="https://…" required />
+            <div class="error" id="err-url" role="alert" aria-live="polite"></div>
+          </div>
+          <div>
+            <label for="steps">Steps to reproduce</label>
+            <textarea class="input" id="steps" name="steps" required placeholder="1) … 2) …"></textarea>
+            <div class="error" id="err-steps" role="alert" aria-live="polite"></div>
+          </div>
+          <div>
+            <label for="impact">Impact</label>
+            <textarea class="input" id="impact" name="impact" required placeholder="What could an attacker achieve?"></textarea>
+            <div class="error" id="err-impact" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div>
+            <label for="agree" class="hint"><input type="checkbox" id="agree" required /> I agree to the program rules and safe-harbor guidelines.</label>
+            <div class="error" id="err-agree" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div class="actions">
+            <button class="btn cta" type="submit">Submit report</button>
+            <button class="btn" type="button" id="downloadJson">Download as JSON</button>
+            <span id="formStatus" class="success" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>-->
+    </div>
+
+    <!-- ABOUT OLIVER -->
+    <section class="card fade-in" id="about" aria-labelledby="about-title">
+      <h2 id="about-title">About Oliver Maicher</h2>
+      <p>Oliver Maicher is the creator of this program and the primary contact for researchers. His focus is simple:
+        clear scope, respectful collaboration, and prompt rewards.
+      </p>
+      <ul class="hint" style="margin-top:6px">
+        <li>Response target: acknowledge within 48 hours; triage within 7 days.</li>
+        <li>Safe Harbor: good-faith research protected; no legal action for compliant testing.</li>
+        <li>Contact: <a href="https://www.linkedin.com/in/oliver-maicher/">Oliver Maicher</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>© <span id="year"></span> Hacker League Bug Bounty • Created by <strong>Oliver Maicher</strong>.
+      </p>
+    </footer>
+  </main>
+
+  <script>
+    // --- Data model (demo). You can persist to localStorage if desired.
+    const programs = [
+      {
+        id: 'p-2025-q3',
+        name: 'Initial One-Price Bounty',
+        status: 'open',
+        reward: 25,
+        budget: 250,
+        spent: 0, // update as reports are paid
+        start: '2025-09-15'
+      },
+      {
+        id: 'p-2025-q2',
+        name: 'Pilot Security Review',
+        status: 'closed',
+        reward: 20,
+        budget: 200,
+        spent: 180,
+        start: '2025-06-01'
+      }
+    ];
+
+    // Accessibility helper
+    const fmt = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' });
+    const dateFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });
+
+    function renderPrograms() {
+      const tbody = document.getElementById('programRows');
+      const q = document.getElementById('search').value.toLowerCase().trim();
+      const status = document.getElementById('statusFilter').value;
+      const sortBy = document.getElementById('sortBy').value;
+
+      let rows = programs.filter(p =>
+        (status === 'all' || p.status === status) &&
+        (!q || p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q))
+      );
+
+      rows.sort((a, b) => {
+        if (sortBy === 'budget') return b.budget - a.budget;
+        if (sortBy === 'name') return a.name.localeCompare(b.name);
+        // default start date desc
+        return new Date(b.start) - new Date(a.start);
+      });
+
+      tbody.innerHTML = rows.map(p => {
+        const pct = Math.min(100, Math.round((p.spent / p.budget) * 100));
+        return `
+          <tr>
+            <td><strong>${p.name}</strong><br><small class="hint">${p.id}</small></td>
+            <td>${p.status === 'open' ? '<span class="badge b-open">Open</span>' : '<span class="badge b-closed">Closed</span>'}</td>
+            <td>${fmt.format(p.reward)} / finding</td>
+            <td>${fmt.format(p.budget)}<br><small class="hint">Spent: ${fmt.format(p.spent)}</small></td>
+            <td>
+              <div class="progress" aria-label="Budget used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
+                <span style="--pct:${pct}%"></span>
+              </div>
+              <small class="hint">${pct}% used</small>
+            </td>
+            <td>${dateFmt.format(new Date(p.start))}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    // Real-time form validation
+    const form = document.getElementById('reportForm');
+    const statusEl = document.getElementById('formStatus');
+
+    function setError(id, msg) {
+      const el = document.getElementById('err-' + id);
+      el.textContent = msg || '';
+    }
+
+    function validate() {
+      let ok = true;
+      const name = document.getElementById('name');
+      const email = document.getElementById('email');
+      const title = document.getElementById('title');
+      const severity = document.getElementById('severity');
+      const url = document.getElementById('url');
+      const steps = document.getElementById('steps');
+      const impact = document.getElementById('impact');
+      const agree = document.getElementById('agree');
+
+      setError('name'); setError('email'); setError('title'); setError('severity'); setError('url'); setError('steps'); setError('impact'); setError('agree');
+
+      if (!name.value.trim()) { setError('name', 'Please enter your name.'); ok = false; }
+      if (!email.validity.valid) { setError('email', 'Enter a valid email.'); ok = false; }
+      if (!title.value.trim()) { setError('title', 'Add a short, descriptive title.'); ok = false; }
+      if (!severity.value) { setError('severity', 'Select a severity.'); ok = false; }
+      try { new URL(url.value); } catch { setError('url', 'Enter a valid URL.'); ok = false; }
+      if (!steps.value.trim()) { setError('steps', 'Provide steps to reproduce.'); ok = false; }
+      if (!impact.value.trim()) { setError('impact', 'Describe the impact.'); ok = false; }
+      if (!agree.checked) { setError('agree', 'You must agree to the rules.'); ok = false; }
+      return ok;
+    }
+
+    form.addEventListener('input', (e) => {
+      validate(); // real-time validation feedback
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate()) {
+        statusEl.textContent = '';
+        return;
+      }
+      statusEl.textContent = 'Report ready! No backend here — use the JSON button to export and email it to security@example.com.';
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // Download JSON of the report
+    document.getElementById('downloadJson').addEventListener('click', () => {
+      if (!validate()) return;
+      const payload = {
+        programId: 'p-2025-q3',
+        rewardPerFinding: 25,
+        reporter: {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+        },
+        title: document.getElementById('title').value,
+        severity: document.getElementById('severity').value,
+        url: document.getElementById('url').value,
+        steps: document.getElementById('steps').value,
+        impact: document.getElementById('impact').value,
+        submittedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `bug-report-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    // Hook up dashboard controls
+    document.getElementById('search').addEventListener('input', renderPrograms);
+    document.getElementById('statusFilter').addEventListener('change', renderPrograms);
+    document.getElementById('sortBy').addEventListener('change', renderPrograms);
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initial paint
+    renderPrograms();
+  </script>
+</body>
+
+</html>
